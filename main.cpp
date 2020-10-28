@@ -1,36 +1,36 @@
-#include "Tokenizador.hpp"
+#include "Lista.hpp"
+#include <fstream>
+#include <iostream>
+#include "Comparador.hpp"
 
 
 using namespace std;
 int main(){
     
+    Lista<neftlix> n;
 	char delimitador[] = ","; 
-	
-
-    FILE *arq;
-    char buffer [100];
-    Lista<float> *lista = new Lista<float>();
-
-    lista->setDelimitador(delimitador);
+    fstream fs("netflix.csv");
+    string s;
+    int ID,k;
+    Comparador c;
     
 
-    arq = fopen ("netflix.csv" , "r");
-      if (arq == NULL) perror ("Error opening file");
-    else
+    while (getline(fs,s))
     {
-      while ( ! feof (arq) )
-      {
-        if ( fgets (buffer , 100 , arq) == NULL ) break;
-        lista->tokenizer(fgets (buffer , 100 , arq));
-      }
-      fclose (arq);
+        n.colocarNoUltimo(tokenizar(s.c_str(),","));
     }
-	 
-    cout<<lista->getToken()<<"\n";
-    cout<<lista->getToken()<<"\n";
-    cout<<lista->getToken()<<"\n";
-    cout<<lista->getToken()<<"\n";
-
     
+    ponta<neftlix> *verificador= n.getPrimeiro();
+
+    while (verificador!=nullptr)
+    {
+        cout<<verificador->valores.idUser<<"-";
+        cout<<verificador->valores.idFilme<<"-";
+        cout<<verificador->valores.Nota<<"\n";
+        verificador=verificador->proximo;
+    }
+    ponta<neftlix> v[5]{*verificador,*verificador,*verificador,*verificador,*verificador};
+    c.criarUsuarios(v);
+
     return 0;
 }
