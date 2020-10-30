@@ -1,26 +1,35 @@
 #include "Lista.hpp"
-#include <fstream>
 #include <iostream>
-#include "Comparador.hpp"
+#include "LerArq.hpp"
+#include "Sort.hpp"
+#include "usuario.hpp"
 
 
 using namespace std;
 int main(){
     
-    Lista<neftlix> n;
-	char delimitador[] = ","; 
-    fstream fs("netflix.csv");
-    string s;
-    int ID,k;
-    Comparador c;
-    
+    Lista<netflix> n(GetData());
 
-    while (getline(fs,s))
-    {
-        n.colocarNoUltimo(tokenizar(s.c_str(),","));
-    }
     
-    ponta<neftlix> *verificador= n.getPrimeiro();
+    Sort(n);
+    std::cout<<"aaaaa";
+
+    Lista<Lista<usuario>>usuarios(CriarUsuarios(n));
+
+    // cout<<usuarios.getTamanho()<<"\n"<<usuarios.getPrimeiro()->valores.getTamanho();
+
+    // ponta<usuario> *verificador= usuarios.getPrimeiro().getPrimeiro();
+    // for (auto i=n.getPrimeiro(); i!=n.getUltimo()->proximo; i=i->proximo)
+    // {
+    // while (verificador!=nullptr)
+    // {
+    //     cout<<verificador->valores.idFilme<<"-";
+    //     cout<<verificador->valores.Nota<<"\n";
+    //     verificador=verificador->proximo;
+    // }
+    // }
+
+    ponta<netflix> *verificador= n.getPrimeiro();
 
     while (verificador!=nullptr)
     {
@@ -29,8 +38,7 @@ int main(){
         cout<<verificador->valores.Nota<<"\n";
         verificador=verificador->proximo;
     }
-    ponta<neftlix> v[5]{*verificador,*verificador,*verificador,*verificador,*verificador};
-    c.criarUsuarios(v);
 
+ 
     return 0;
 }

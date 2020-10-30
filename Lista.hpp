@@ -20,20 +20,27 @@ private:
 
     ponta<T> *primeiro;
     ponta<T> *ultimo;
+    int tam=0;
 
 public:
 
-
     Lista();
+    Lista(const Lista<T> &obj);
+    Lista(Lista<T> &&obj);
     ~Lista();
 
     void colocarNoUltimo(T valor);
     void tirarOUltimo();
     int getTamanho();
     
-    ponta<T> *getVetor();
     ponta<T> *getPrimeiro();
     ponta<T> *getUltimo();
+
+    Lista<T> &operator=(const Lista<T> &obj);
+    bool operator==(const Lista<T> &obj);
+    bool operator!=(const Lista<T> &obj);
+
+    void limpar();
 
 };
 
@@ -48,6 +55,86 @@ Lista<T>::Lista(){
     primeiro=Ponta;
     ultimo=Ponta;
 }
+
+template <typename T>
+Lista<T>::Lista( Lista<T> &&obj){
+    primeiro = obj.primeiro;
+    ultimo = obj.ultimo;
+    obj.primeiro = nullptr;
+    obj.ultimo = nullptr;
+    tam = obj.tam;
+}
+
+template<typename T>
+Lista<T>::Lista(const Lista<T> &obj) 
+        {
+            
+            if (obj.primeiro == nullptr)
+            {
+                
+                primeiro = ultimo = nullptr;
+            }else{
+                primeiro = new ponta<T>(*obj.primeiro);
+                ponta<T> *Ponta = obj.primeiro->proximo;
+                ponta<T> *PontaLista= primeiro;
+                while (Ponta != obj.ultimo->proximo)
+                {
+                    
+                    PontaLista->proximo = new ponta<T>();
+
+                    PontaLista->proximo->valores=Ponta->valores;
+                    PontaLista->proximo->anterior=PontaLista;
+                    PontaLista->proximo->proximo=nullptr;
+
+
+                    PontaLista = PontaLista->proximo;
+                    Ponta = Ponta->proximo;
+
+                }
+                ultimo = PontaLista;
+                tam = obj.tam;
+
+            }
+
+        }
+
+template<typename T>
+Lista<T> &Lista<T>::operator=(const Lista<T> &obj){
+            if(this != &obj && obj.primeiro != nullptr){
+               
+                while (ultimo!=nullptr)
+            {
+                ponta<T>* Ponta = ultimo;
+                ultimo = ultimo->anterior;
+                delete Ponta;
+                Ponta = nullptr;
+                tam--; 
+            }
+
+            primeiro = ultimo = nullptr;
+
+
+                primeiro = new ponta<T>(*obj.primeiro);
+                ponta<T> *Ponta = obj.primeiro->proximo;
+                ponta<T> *PontaLista= primeiro;
+                while (Ponta != obj.ultimo->proximo)
+                {
+                    PontaLista->proximo = new ponta<T>();
+
+                    PontaLista->proximo->valores=Ponta->valores;
+                    PontaLista->proximo->anterior=PontaLista;
+                    PontaLista->proximo->proximo=nullptr;
+
+                    PontaLista = PontaLista->proximo;
+                    Ponta = Ponta->proximo;
+                }
+                ultimo = PontaLista;
+                tam = obj.tam;
+            }
+            return *this;
+        }
+        
+
 
 
 template<typename T>
@@ -68,14 +155,16 @@ void Lista<T>::colocarNoUltimo(T valor){
     temp->anterior=ultimo;
     ultimo=temp;
     temp->proximo=nullptr;
-    
+    tam++;
 }
 
 template<typename T>
 void Lista<T>::tirarOUltimo(){
     ponta<T> *temp=ultimo;
     ultimo=ultimo->anterior;
+    tam--;
     delete temp;
+    temp=nullptr;
 }
 
 
@@ -83,28 +172,9 @@ void Lista<T>::tirarOUltimo(){
 
 template<typename T>
 int Lista<T>::getTamanho(){
-    int tam=0;
-    for(auto i = getPrimeiro() ;  i!=ultimo->proximo ; i=i->proximo){
-        tam++; 
-    }
-std::cout<<tam<<"\n";
-
 return tam;
 };
 
-template<typename T>
-ponta<T> *Lista<T>::getVetor(){
-    ponta<T> *vetor[getTamanho()];
-    int j=0;
-    for(ponta<T> *i = getPrimeiro() ;  i!=ultimo->proximo ; i=i->proximo){
-         vetor[j]=i;
-        
-        std::cout<<j<<"  "<<vetor[j]<<"\n";
-        j++;
-    }
-
-        return *vetor;
-};
 
 
 
@@ -116,7 +186,33 @@ ponta<T> *Lista<T>::getPrimeiro(){
 
 template<typename T>
 ponta<T> *Lista<T>::getUltimo(){
-    return ultimo->anterior;
+    return ultimo;
+}
+
+template<typename T>
+bool Lista<T>::operator==(const Lista<T> &obj){
+            return this->primeiro == obj.primeiro && this->ultimo == obj.ultimo ? true : false;
+        }
+
+template<typename T>
+bool Lista<T>::operator!=(const Lista<T> &obj){
+            return this->primeiro == obj.primeiro && this->ultimo == obj.ultimo ? false : true;
+        }
+
+
+
+template<typename T>
+void Lista<T>::limpar(){
+    
+    while (ultimo!=primeiro)
+            {
+                ponta<T>* Ponta = ultimo;
+                ultimo = ultimo->anterior;
+                delete Ponta;
+                Ponta = nullptr;
+                tam--; 
+            }
+
 }
 
 
