@@ -8,7 +8,7 @@ struct netflix
     char* Nota;
 };
 
-netflix tokenizar(const char* linha,const char* delimitador){
+netflix tokenizarLista(const char* linha,const char* delimitador){
    netflix n;
    char texto[strlen(linha)+1];
    strcpy(texto,linha);

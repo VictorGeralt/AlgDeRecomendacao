@@ -1,44 +1,77 @@
-#include "Lista.hpp"
+
 #include <iostream>
-#include "LerArq.hpp"
+#include "LerLista.hpp"
+#include "LerUsuario.hpp"
 #include "Sort.hpp"
-#include "usuario.hpp"
+#include "Comparador.hpp"
 
 
 using namespace std;
 int main(){
     
-    Lista<netflix> n(GetData());
-
+    Lista<netflix> n(GetLista());
+    int k;
     
     Sort(n);
-    std::cout<<"aaaaa";
+
+    // ponta<netflix> *verificador1= n.getPrimeiro();
+
+    // while (verificador1!=nullptr)
+    // {
+    //     cout<<verificador1->valores.idUser<<"-";
+    //     cout<<verificador1->valores.idFilme<<"-";
+    //     cout<<verificador1->valores.Nota<<"\n";
+    //     verificador1=verificador1->proximo;
+    // }
+
 
     Lista<Lista<usuario>>usuarios(CriarUsuarios(n));
 
-    // cout<<usuarios.getTamanho()<<"\n"<<usuarios.getPrimeiro()->valores.getTamanho();
+    // cout<<"numero de usuarios : "<<usuarios.getTamanho()<<"\n";
 
-    // ponta<usuario> *verificador= usuarios.getPrimeiro().getPrimeiro();
-    // for (auto i=n.getPrimeiro(); i!=n.getUltimo()->proximo; i=i->proximo)
+    // ponta<usuario> *verificador2=usuarios.getPrimeiro()->valores.getPrimeiro();
+    // for (auto i=usuarios.getPrimeiro()->valores.getPrimeiro(); i!=usuarios.getPrimeiro()->valores.getUltimo(); i=i->proximo)
     // {
-    // while (verificador!=nullptr)
-    // {
-    //     cout<<verificador->valores.idFilme<<"-";
-    //     cout<<verificador->valores.Nota<<"\n";
-    //     verificador=verificador->proximo;
-    // }
+    //     cout<<verificador2->valores.idFilme<<"-";
+    //     cout<<verificador2->valores.Nota<<"\n";
+    //     verificador2=verificador2->proximo;
+
     // }
 
-    ponta<netflix> *verificador= n.getPrimeiro();
 
-    while (verificador!=nullptr)
+
+    Lista<usuario> u(getUsuario());
+
+    // ponta<usuario> *verificador3=u.getPrimeiro();
+
+    // for (auto i=u.getPrimeiro(); i!=u.getUltimo()->proximo; i=i->proximo)
+    // {
+    //     cout<<i->valores.idFilme<<"-";
+    //     cout<<i->valores.Nota<<"\n";
+
+    // }
+
+    Lista<Pontuacao> p;
+
+    cout<<"Digite quantos usuarios voce quer receber:";
+    cin>>k;
+
+    for (auto i = usuarios.getPrimeiro(); i != usuarios.getUltimo(); i=i->proximo)
     {
-        cout<<verificador->valores.idUser<<"-";
-        cout<<verificador->valores.idFilme<<"-";
-        cout<<verificador->valores.Nota<<"\n";
-        verificador=verificador->proximo;
-    }
+    p.colocarNoUltimo(calcularDistancia(i->valores,u));
+    
+    };
 
- 
+
+
+    
+    Lista<Pontuacao> kmelhores{KMaisParecidos(p,k)};
+    
+    for (auto i = kmelhores.getPrimeiro(); i!=nullptr; i=i->proximo)
+    {
+        cout<<i->valores.filmesEmComum<<"---"<<i->valores.distanciaEuclidiana<<"---"<<pontos(i->valores)<<"\n";
+        
+    }
+    
     return 0;
 }

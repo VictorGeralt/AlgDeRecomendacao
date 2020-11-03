@@ -5,7 +5,7 @@
 
 
 
-Lista<netflix> GetData(){
+Lista<netflix> GetLista(){
 Lista <netflix> n;
 
 std::fstream fs("netflix.csv");
@@ -15,7 +15,7 @@ std::fstream fs("netflix.csv");
 
     while (getline(fs,s))
     {
-        n.colocarNoUltimo(tokenizar(s.c_str(),","));
+        n.colocarNoUltimo(tokenizarLista(s.c_str(),","));
     }
 
     return std::move(n);

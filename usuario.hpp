@@ -1,4 +1,6 @@
 #include <cstring>
+#include <fstream>
+#include <string>
 #include"Lista.hpp"
 #include"netflix.hpp"
 
@@ -18,7 +20,6 @@ struct usuario
 
     for (auto i=n.getPrimeiro(); i!=n.getUltimo()->proximo; i=i->proximo)
     {
-        std::cout<<"aaaaa";
             usuario aux;
             aux.idFilme=i->valores.idFilme;
             aux.Nota=i->valores.Nota;
@@ -26,9 +27,7 @@ struct usuario
 
             if (std::stoi(i->valores.idUser)!=a)
             {
-                std::cout<<"bbbbbbb";
                 Users.colocarNoUltimo(User);
-                //User.limpar();
                 a=std::stoi(i->valores.idUser);
             }
             
@@ -37,3 +36,57 @@ struct usuario
     }
     return std::move(Users);
 }
+
+usuario tokenizarUsuario(const char* linha,const char* delimitador){
+   usuario n;
+   char texto[strlen(linha)+1];
+   strcpy(texto,linha);
+   char * null;
+
+
+   char* tokenizado = strtok(texto, delimitador);
+   null= new char[strlen(tokenizado)+1];
+   strcpy(null,tokenizado);
+   
+   tokenizado = strtok(NULL, delimitador);
+   n.idFilme= new char[strlen(tokenizado)+1];
+   strcpy(n.idFilme,tokenizado);
+
+   tokenizado = strtok(NULL, delimitador);
+   n.Nota= new char[strlen(tokenizado)+1];
+   strcpy(n.Nota,tokenizado);
+
+
+   return n;
+}
+
+// usuario getUsuario(){
+    
+//     usuario u;
+//     std::fstream fs("ParaComparar.csv");
+//     std::string s;
+//     getline(fs,s);
+//     const char* linha=s.c_str();
+//     const char* delimitador=",";
+//     char * null;
+
+
+//    char texto[strlen(linha)+1];
+//    strcpy(texto,linha);
+
+
+//    char* tokenizado = strtok(texto, delimitador);
+//    null= new char[strlen(tokenizado)+1];
+//    strcpy(null,tokenizado);
+   
+//    tokenizado = strtok(NULL, delimitador);
+//    u.idFilme= new char[strlen(tokenizado)+1];
+//    strcpy(u.idFilme,tokenizado);
+
+//    tokenizado = strtok(NULL, delimitador);
+//    u.Nota= new char[strlen(tokenizado)+1];
+//    strcpy(u.Nota,tokenizado);
+
+
+//     return u;
+// }
