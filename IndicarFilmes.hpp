@@ -82,6 +82,5 @@ Lista <Filmes> AnalizarFilmes(Lista<Pontuacao> semelhantes,Lista<usuario> &usuar
             }
         }    
     }
-
     return std::move(Recomendacoes);
 }
