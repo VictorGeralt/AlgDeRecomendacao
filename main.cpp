@@ -1,9 +1,9 @@
-
 #include <iostream>
 #include "LerLista.hpp"
 #include "LerUsuario.hpp"
 #include "Sort.hpp"
-#include "Comparador.hpp"
+#include "IndicarFilmes.hpp"
+#include "netflix.hpp"
 
 
 using namespace std;
@@ -69,9 +69,18 @@ int main(){
     
     for (auto i = kmelhores.getPrimeiro(); i!=nullptr; i=i->proximo)
     {
-        cout<<i->valores.filmesEmComum<<"---"<<i->valores.distanciaEuclidiana<<"---"<<pontos(i->valores)<<"\n";
-        
+        cout<<i->valores.filmesEmComum<<"---"<<i->valores.distanciaEuclidiana<<"---"<<pontos(i->valores)<<"\n";    
     }
     
+    Lista<Filmes> recomendacoes{AnalizarFilmes(kmelhores,u)};
+
+
+    for (auto i=recomendacoes.getPrimeiro(); i!=nullptr; i=i->proximo)
+    {
+        cout<<i->valores.id<<"-";
+        cout<<i->valores.notaTotal<<"\n";
+
+    }
+
     return 0;
 }

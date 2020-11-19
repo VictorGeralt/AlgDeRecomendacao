@@ -41,6 +41,7 @@ public:
     bool operator!=(const Lista<T> &obj);
 
     void limpar();
+    void TirarOProximo(ponta<T> *aux);
 
 };
 
@@ -213,6 +214,13 @@ void Lista<T>::limpar(){
                 tam--; 
             }
 
+}
+
+template<typename T>
+void Lista<T>::TirarOProximo(ponta<T> *aux){
+    aux->valores.notaTotal+=aux->proximo->valores.notaTotal;
+    aux->proximo=aux->proximo->proximo;
+    tam--;
 }
 
 

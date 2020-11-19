@@ -63,7 +63,6 @@ Lista <Pontuacao> KMaisParecidos(Lista<Pontuacao> &P,int K){
         }
 
     Lista<Pontuacao> list;
-    list.colocarNoUltimo(Pontuacao(Lista<usuario> (), 12,5));
 
     return std::move(aux);
 }
