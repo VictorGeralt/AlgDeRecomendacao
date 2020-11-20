@@ -219,14 +219,20 @@ void Lista<T>::limpar(){
 
 template<typename T>
 void Lista<T>::TirarOProximo(ponta<T> *aux){
+    ponta<T>* temp = aux->proximo;
     aux->proximo=aux->proximo->proximo;
+    delete temp;
+    temp=nullptr;
     tam--;
 }
 
 template<typename T>
 void Lista<T>::Tirar(ponta<T> *aux){
+    ponta<T>* temp = aux;
     aux->anterior->proximo=aux->proximo;
-    aux->proximo=aux->proximo->proximo;
+    aux->proximo->anterior=aux->anterior;
+    delete temp;
+    temp=nullptr;
     tam--;
 }
 

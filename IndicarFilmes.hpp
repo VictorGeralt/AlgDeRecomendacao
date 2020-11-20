@@ -81,15 +81,12 @@ Lista <Filmes> AnalizarFilmes(Lista<Pontuacao> semelhantes,Lista<netflix> &usuar
         {
             if (aux==j->valores.id)
             {
-                std::cout<<aux<<"--";
-                std::cout<<j->valores.id<<"-"<<j->valores.notaTotal<<"\n";
-                std::cout<<"---------------\n";
-                Recomendacoes.TirarOProximo(j->anterior);
+                Recomendacoes.Tirar(j);
             }
-        }    
+            
+        }  
     }
 
-    
     return std::move(Recomendacoes);
 }
 
@@ -98,8 +95,14 @@ void KMelhoresFilmes(Lista<Filmes> filmes,int k){
         auto aux=filmes.getPrimeiro();
         for (size_t i=0; i<k; i++)
         {
+        if (aux->valores.id>493||aux->valores.id<0)
+        {
+        aux=aux->proximo;
+        i--;
+        }else{
         std::cout<<aux->valores.id<<"-";
         std::cout<<aux->valores.notaTotal<<"\n";
         aux=aux->proximo;
+        }
         }
 }
