@@ -42,6 +42,7 @@ public:
 
     void limpar();
     void TirarOProximo(ponta<T> *aux);
+    void Tirar(ponta<T> *aux);
 
 };
 
@@ -218,10 +219,15 @@ void Lista<T>::limpar(){
 
 template<typename T>
 void Lista<T>::TirarOProximo(ponta<T> *aux){
-    aux->valores.notaTotal+=aux->proximo->valores.notaTotal;
     aux->proximo=aux->proximo->proximo;
     tam--;
 }
 
+template<typename T>
+void Lista<T>::Tirar(ponta<T> *aux){
+    aux->anterior->proximo=aux->proximo;
+    aux->proximo=aux->proximo->proximo;
+    tam--;
+}
 
 #endif

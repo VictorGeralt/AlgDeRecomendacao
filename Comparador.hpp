@@ -5,17 +5,19 @@
 
 struct Pontuacao
 {
-    Lista<usuario> u;
+    Lista<netflix> u;
     float distanciaEuclidiana;
     int filmesEmComum;
-    Pontuacao(Lista<usuario> u,float distanciaEuclidiana,int filmesEmComum): u(u),distanciaEuclidiana(distanciaEuclidiana),filmesEmComum(filmesEmComum){};
+    int id;
+    Pontuacao(Lista<netflix> u,float distanciaEuclidiana,int filmesEmComum,int id): u(u),distanciaEuclidiana(distanciaEuclidiana),filmesEmComum(filmesEmComum),id(id){};
     Pontuacao()=default;
 };
 
 
-Pontuacao calcularDistancia(Lista <usuario> &user,Lista<usuario> comparado){
+Pontuacao calcularDistancia(Lista <netflix> &user,Lista<netflix> comparado){
     float distanciaEuclidiana=0;
     int filmesEmComum=0;
+    int id=std::stoi(user.getPrimeiro()->valores.idUser);
     for (auto i = user.getPrimeiro(); i!=user.getUltimo() ; i=i->proximo){
         auto aux=i->valores;
         for (auto j=comparado.getPrimeiro() ; j != comparado.getUltimo() ; j=j->proximo){
@@ -26,9 +28,9 @@ Pontuacao calcularDistancia(Lista <usuario> &user,Lista<usuario> comparado){
         }
     }
     distanciaEuclidiana=sqrt(distanciaEuclidiana);
-
     
-    return std::move(Pontuacao(user,distanciaEuclidiana,filmesEmComum));
+    
+    return std::move(Pontuacao(user,distanciaEuclidiana,filmesEmComum,id));
 }
 
 float pontos(Pontuacao &p){
@@ -61,8 +63,6 @@ Lista <Pontuacao> KMaisParecidos(Lista<Pontuacao> &P,int K){
                     }       
             }  
         }
-
-    Lista<Pontuacao> list;
 
     return std::move(aux);
 }

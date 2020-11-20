@@ -1,4 +1,4 @@
-#include <iostream>
+
 #include "LerLista.hpp"
 #include "LerUsuario.hpp"
 #include "Sort.hpp"
@@ -10,7 +10,7 @@ using namespace std;
 int main(){
     
     Lista<netflix> n(GetLista());
-    int k;
+    int k=10;
     
     Sort(n);
 
@@ -25,27 +25,25 @@ int main(){
     // }
 
 
-    Lista<Lista<usuario>>usuarios(CriarUsuarios(n));
+    Lista<Lista<netflix>>usuarios(CriarUsuarios(n));
 
     // cout<<"numero de usuarios : "<<usuarios.getTamanho()<<"\n";
+    // auto verificador2= usuarios.getPrimeiro()->valores.getPrimeiro();
+    // auto verificador3= usuarios.getPrimeiro();
 
-    // ponta<usuario> *verificador2=usuarios.getPrimeiro()->valores.getPrimeiro();
-    // for (auto i=usuarios.getPrimeiro()->valores.getPrimeiro(); i!=usuarios.getPrimeiro()->valores.getUltimo(); i=i->proximo)
-    // {
-    //     cout<<verificador2->valores.idFilme<<"-";
-    //     cout<<verificador2->valores.Nota<<"\n";
-    //     verificador2=verificador2->proximo;
-
+    // for (auto i = usuarios.getPrimeiro(); i != nullptr; i=i->proximo)
+    // {   
+    //         cout<<i->valores.getTamanho()<<"\n";
+    
     // }
 
+    Lista<netflix> u(getUsuario());
 
-
-    Lista<usuario> u(getUsuario());
-
-    // ponta<usuario> *verificador3=u.getPrimeiro();
+    // ponta<netflix> *verificador4=u.getPrimeiro();
 
     // for (auto i=u.getPrimeiro(); i!=u.getUltimo()->proximo; i=i->proximo)
     // {
+    //     cout<<i->valores.idUser<<"-";
     //     cout<<i->valores.idFilme<<"-";
     //     cout<<i->valores.Nota<<"\n";
 
@@ -53,9 +51,7 @@ int main(){
 
     Lista<Pontuacao> p;
 
-    cout<<"Digite quantos usuarios voce quer receber:";
-    cin>>k;
-
+    
     for (auto i = usuarios.getPrimeiro(); i != usuarios.getUltimo(); i=i->proximo)
     {
     p.colocarNoUltimo(calcularDistancia(i->valores,u));
@@ -63,24 +59,16 @@ int main(){
     };
 
 
-
-    
     Lista<Pontuacao> kmelhores{KMaisParecidos(p,k)};
     
     for (auto i = kmelhores.getPrimeiro(); i!=nullptr; i=i->proximo)
     {
-        cout<<i->valores.filmesEmComum<<"---"<<i->valores.distanciaEuclidiana<<"---"<<pontos(i->valores)<<"\n";    
+        cout<<"ID: "<<i->valores.id<<"--"<<"Filmes em Comum: "<<i->valores.filmesEmComum<<"--"<<"Distancia: "<<i->valores.distanciaEuclidiana<<"--"<<"Pontuacao: "<<pontos(i->valores)<<"\n";    
     }
     
     Lista<Filmes> recomendacoes{AnalizarFilmes(kmelhores,u)};
 
-
-    for (auto i=recomendacoes.getPrimeiro(); i!=nullptr; i=i->proximo)
-    {
-        cout<<i->valores.id<<"-";
-        cout<<i->valores.notaTotal<<"\n";
-
-    }
+    KMelhoresFilmes(recomendacoes,k);
 
     return 0;
 }

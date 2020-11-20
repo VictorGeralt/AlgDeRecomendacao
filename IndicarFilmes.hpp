@@ -9,7 +9,7 @@ struct Filmes
     Filmes()=default;
 };
 
-Lista <Filmes> AnalizarFilmes(Lista<Pontuacao> semelhantes,Lista<usuario> &usuario){
+Lista <Filmes> AnalizarFilmes(Lista<Pontuacao> semelhantes,Lista<netflix> &usuario){
     Lista <Filmes> Recomendacoes;
     Filmes filme;
     for (auto i = semelhantes.getPrimeiro(); i!=semelhantes.getUltimo() ; i=i->proximo){
@@ -45,6 +45,7 @@ Lista <Filmes> AnalizarFilmes(Lista<Pontuacao> semelhantes,Lista<usuario> &usuar
     {
         if (aux->valores.id==aux->proximo->valores.id)
         {
+            aux->valores.notaTotal+=aux->proximo->valores.notaTotal;
             Recomendacoes.TirarOProximo(aux);
         }else{
             aux=aux->proximo;
@@ -71,16 +72,34 @@ Lista <Filmes> AnalizarFilmes(Lista<Pontuacao> semelhantes,Lista<usuario> &usuar
         
     }
 }
+
     for (auto i = usuario.getPrimeiro(); i!=nullptr ; i=i->proximo){
+
         int aux=std::stoi(i->valores.idFilme);
+
         for (auto j=Recomendacoes.getPrimeiro();j !=nullptr;j=j->proximo)
         {
             if (aux==j->valores.id)
             {
                 std::cout<<aux<<"--";
+                std::cout<<j->valores.id<<"-"<<j->valores.notaTotal<<"\n";
+                std::cout<<"---------------\n";
                 Recomendacoes.TirarOProximo(j->anterior);
             }
         }    
     }
+
+    
     return std::move(Recomendacoes);
+}
+
+
+void KMelhoresFilmes(Lista<Filmes> filmes,int k){
+        auto aux=filmes.getPrimeiro();
+        for (size_t i=0; i<k; i++)
+        {
+        std::cout<<aux->valores.id<<"-";
+        std::cout<<aux->valores.notaTotal<<"\n";
+        aux=aux->proximo;
+        }
 }

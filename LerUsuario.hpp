@@ -4,9 +4,9 @@
 #include <string>
 #pragma once
 
-Lista <usuario> getUsuario(){
+Lista <netflix> getUsuario(){
     
-    Lista <usuario> u;
+    Lista <netflix> u;
 
     std::fstream fs("ParaComparar.csv");
     std::string s;
@@ -15,7 +15,7 @@ Lista <usuario> getUsuario(){
 
     while (getline(fs,s))
     {
-        u.colocarNoUltimo(tokenizarUsuario(s.c_str(),","));
+        u.colocarNoUltimo(tokenizarNetflix(s.c_str(),","));
     }
 
     return std::move(u);

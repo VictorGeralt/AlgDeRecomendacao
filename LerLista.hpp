@@ -15,7 +15,7 @@ std::fstream fs("netflix.csv");
 
     while (getline(fs,s))
     {
-        n.colocarNoUltimo(tokenizarLista(s.c_str(),","));
+        n.colocarNoUltimo(tokenizarNetflix(s.c_str(),","));
     }
 
     return std::move(n);
