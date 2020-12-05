@@ -41,7 +41,7 @@ public:
     bool operator!=(const Lista<T> &obj);
 
     void limpar();
-    void TirarOProximo(ponta<T> *aux);
+    void TirarOAnterior(ponta<T> *aux);
     void Tirar(ponta<T> *aux);
 
 };
@@ -218,9 +218,9 @@ void Lista<T>::limpar(){
 }
 
 template<typename T>
-void Lista<T>::TirarOProximo(ponta<T> *aux){
-    ponta<T>* temp = aux->proximo;
-    aux->proximo=aux->proximo->proximo;
+void Lista<T>::TirarOAnterior(ponta<T> *aux){
+    ponta<T>* temp = aux->anterior;
+    aux->anterior=aux->anterior->anterior;
     delete temp;
     temp=nullptr;
     tam--;

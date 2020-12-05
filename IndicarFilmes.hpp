@@ -1,5 +1,7 @@
 #include "Comparador.hpp"
 #include <iostream>
+#include <map>
+
 
 struct Filmes
 {
@@ -9,7 +11,8 @@ struct Filmes
     Filmes()=default;
 };
 
-Lista <Filmes> AnalizarFilmes(Lista<Pontuacao> semelhantes,Lista<netflix> &usuario){
+
+Lista<Filmes> AnalizarFilmes(Lista<Pontuacao> semelhantes,Lista<netflix> &usuario,int k){
     Lista <Filmes> Recomendacoes;
     Filmes filme;
     for (auto i = semelhantes.getPrimeiro(); i!=semelhantes.getUltimo() ; i=i->proximo){
@@ -40,69 +43,62 @@ Lista <Filmes> AnalizarFilmes(Lista<Pontuacao> semelhantes,Lista<netflix> &usuar
         
     }
 }
-    auto aux= Recomendacoes.getPrimeiro();
+
+    std::map<int,float> novaRecomendacao;
+    float maiornota=0;
+
+    auto aux= Recomendacoes.getPrimeiro()->proximo;
     do
     {
-        if (aux->valores.id==aux->proximo->valores.id)
+        if (aux->valores.id!=aux->proximo->valores.id)
         {
-            aux->valores.notaTotal+=aux->proximo->valores.notaTotal;
-            Recomendacoes.TirarOProximo(aux);
+            aux->valores.notaTotal+=aux->anterior->valores.notaTotal;
+            novaRecomendacao.insert({aux->valores.id,aux->valores.notaTotal});
+            maiornota=maiornota<aux->valores.notaTotal ? aux->valores.notaTotal:maiornota;
+            aux->valores.notaTotal=0;
+            aux=aux->proximo;
+
         }else{
+            aux->valores.notaTotal+=aux->anterior->valores.notaTotal;
+            Recomendacoes.TirarOAnterior(aux);
             aux=aux->proximo;
         }
     } while (aux->proximo!=nullptr);
-    
 
-
-    for (auto i=Recomendacoes.getPrimeiro();i !=Recomendacoes.getUltimo()->anterior;i=i->proximo){
-       
-    auto jMax = i;   
-    for (auto j = i->proximo; j != Recomendacoes.getUltimo()->proximo; j=j->proximo){
-          
-        if (j->valores.notaTotal > jMax->valores.notaTotal)
+    for (auto i = usuario.getPrimeiro(); i!=nullptr; i=i->proximo)
+    {   
+        if (novaRecomendacao.find(std::stoi(i->valores.idFilme))!=novaRecomendacao.end())
         {
-            jMax = j;
+            novaRecomendacao.erase(novaRecomendacao.find(std::stoi(i->valores.idFilme)));
         }
-    }
-    if (jMax != i) 
-    {
-        auto aux=i->valores;
-        i->valores=jMax->valores;
-        jMax->valores=aux;
         
     }
-}
+    
 
-    for (auto i = usuario.getPrimeiro(); i!=nullptr ; i=i->proximo){
+    std::pair<int,float> sort[novaRecomendacao.size()];
+    int j=0;
+    for (auto &&i : novaRecomendacao)
+    {
+        sort[j]=i;
+        j++;
+    }
+    
+    
 
-        int aux=std::stoi(i->valores.idFilme);
+    radixsort(sort,novaRecomendacao.size(),maiornota);
 
-        for (auto j=Recomendacoes.getPrimeiro();j !=nullptr;j=j->proximo)
-        {
-            if (aux==j->valores.id)
-            {
-                Recomendacoes.Tirar(j);
-            }
-            
-        }  
+    Lista<Filmes> finalList;
+
+
+    for (auto i = novaRecomendacao.size()-1; i > novaRecomendacao.size()-(k+1); i--)
+    {
+        finalList.colocarNoUltimo(Filmes(sort[i].second,sort[i].first));
+        std::cout<<"ID do filme:   "<<finalList.getUltimo()->valores.id<<"         Nota total do filme: "<<finalList.getUltimo()->valores.notaTotal<<std::endl;
     }
 
-    return std::move(Recomendacoes);
+        
+    return finalList;
 }
 
 
-void KMelhoresFilmes(Lista<Filmes> filmes,int k){
-        auto aux=filmes.getPrimeiro();
-        for (size_t i=0; i<k; i++)
-        {
-        if (aux->valores.id>493||aux->valores.id<0)
-        {
-        aux=aux->proximo;
-        i--;
-        }else{
-        std::cout<<aux->valores.id<<"-";
-        std::cout<<aux->valores.notaTotal<<"\n";
-        aux=aux->proximo;
-        }
-        }
-}
+

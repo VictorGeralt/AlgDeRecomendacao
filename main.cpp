@@ -2,7 +2,7 @@
 #include "LerLista.hpp"
 #include "LerUsuario.hpp"
 #include "Sort.hpp"
-#include "Cache.hpp"
+#include "NovaEntrada.hpp"
 #include "netflix.hpp"
 
 
@@ -11,44 +11,16 @@ int main(){
     
     Lista<netflix> n(GetLista());
     int k=10;
-    int tam=5;
+    int tam=13;
     
     Sort(n);
-
-    // ponta<netflix> *verificador1= n.getPrimeiro();
-
-    // while (verificador1!=nullptr)
-    // {
-    //     cout<<verificador1->valores.idUser<<"-";
-    //     cout<<verificador1->valores.idFilme<<"-";
-    //     cout<<verificador1->valores.Nota<<"\n";
-    //     verificador1=verificador1->proximo;
-    // }
 
 
     Lista<Lista<netflix>>usuarios(CriarUsuarios(n));
 
-    // cout<<"numero de usuarios : "<<usuarios.getTamanho()<<"\n";
-    // auto verificador2= usuarios.getPrimeiro()->valores.getPrimeiro();
-    // auto verificador3= usuarios.getPrimeiro();
-
-    // for (auto i = usuarios.getPrimeiro(); i != nullptr; i=i->proximo)
-    // {   
-    //         cout<<i->valores.getTamanho()<<"\n";
-    
-    // }
-
+   
     Lista<netflix> u(getUsuario());
 
-    // ponta<netflix> *verificador4=u.getPrimeiro();
-
-    // for (auto i=u.getPrimeiro(); i!=u.getUltimo()->proximo; i=i->proximo)
-    // {
-    //     cout<<i->valores.idUser<<"-";
-    //     cout<<i->valores.idFilme<<"-";
-    //     cout<<i->valores.Nota<<"\n";
-
-    // }
 
     Lista<Pontuacao> p;
 
@@ -60,27 +32,56 @@ int main(){
     };
 
 
+    cout<<" ------------------------------------"<<endl;
+    cout<<"|Melhores usuario para o usuario base|"<<endl;
+    cout<<" ------------------------------------"<<endl;
+
+
     Lista<Pontuacao> kmelhores{KMaisParecidos(p,k)};
     
     for (auto i = kmelhores.getPrimeiro(); i!=nullptr; i=i->proximo)
     {
-        cout<<"ID: "<<i->valores.id<<"--"<<"Filmes em Comum: "<<i->valores.filmesEmComum<<"--"<<"Distancia: "<<i->valores.distanciaEuclidiana<<"--"<<"Pontuacao: "<<pontos(i->valores)<<"\n";    
+        cout<<"ID do usuario: "<<i->valores.id<<endl;    
     }
+
+
+    cout<<" \n\n\n"<<endl;
+
+
+    cout<<" ------------------------------------"<<endl;
+    cout<<"|Melhores filmes para o usuario base | "<<endl;
+    cout<<" ------------------------------------"<<endl;
+
+    auto recomendacoes{AnalizarFilmes(kmelhores,u,k)};
+
+    cout<<" \n\n\n"<<endl;
+
+    cout<<" ----------------------------------"<<endl;
+    cout<<"|     Colocando dados no Cache     | "<<endl;
+    cout<<" ----------------------------------"<<endl;
+
+    Cache cache=criarCache(u,recomendacoes,tam);
     
-    Lista<Filmes> recomendacoes{AnalizarFilmes(kmelhores,u)};
 
-    KMelhoresFilmes(recomendacoes,k);
+    Lista<netflix> u2(getNovoUsuario());
+    cout<<" \n\n\n"<<endl;
 
 
-    // Cache cache;
-    // cache.criarCache(u,recomendacoes,tam);
+    cout<<" ---------------------------------"<<endl;
+    cout<<"|         Testando Cache          |"<<endl;
+    cout<<" ---------------------------------"<<endl;
 
-    // cache.getItem(1);
+    cout<<"Verificando conteudo de um item do cache:  "<<cache.getItem(4)->filmes.getPrimeiro()->valores.id<<endl;
+    cout<<"Inserindo item aleatorio no cache:           ";
+    cache.inserirCache(155555555,recomendacoes);
+    cout<<"Verificando dados do item aleatorio criado no cache:  "<<cache.getItem(155555555)->filmes.getPrimeiro()->valores.id<<endl;
 
-    // cache.inserirCache(5,recomendacoes);
+    cout<<" \n\n\n"<<endl;
 
-    // auto verificador5=cache.getItem(5);
-    // cout<<(cache.cache.find(5)==cache.cache.end() ? "sim" :"nao");
+    incluirNovoUsuario(usuarios,cache,u2);
+
+    
+    
     
     return 0;
 }

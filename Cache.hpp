@@ -1,58 +1,69 @@
 #include "IndicarFilmes.hpp"
-#include <map>
-
 using namespace std;
 
 struct Cache_U
 {
     Lista<Filmes> filmes;
-    int contador;
+    int contador=0;
     Cache_U ()=default;
-    Cache_U (Lista<Filmes> filmes):filmes(filmes),contador(1){}
+    Cache_U (Lista<Filmes> filmes):filmes(filmes),contador(0){}
 };
 
 
 class Cache
 {
     private:
-    unsigned short tamanho{20};
+    int tamanho{30};
 
     public:
 
     Cache()=default;
-    Cache(unsigned short TAM):tamanho(TAM){}
+    Cache(int TAM):tamanho(TAM){}
 
     map<int,Cache_U> cache;
 
-    Cache criarCache(Lista<netflix> usuario,Lista<Filmes> filmes,int tamanho);
     void inserirCache(int chave,Lista<Filmes> filmes);
-    Lista<Filmes> &getItem(int chave);
+    Cache_U *getItem(int chave);
     void LRU();
+    void aumentarContador(int chave);
+    int getTam();
+    int getMaxTam();
+
     
 
 };
 
-
-
-Cache Cache::criarCache(Lista<netflix> usuario,Lista<Filmes> filmes,int tamanho){
-    Cache cache(tamanho);
-    
-    for (auto i = usuario.getPrimeiro(); i !=nullptr; i=i->proximo)
-    {
-        if (stoi(i->valores.idFilme)<493&&stoi(i->valores.idFilme)>0)
-        {
-        cache.inserirCache(stoi(i->valores.idFilme),filmes);
-    } 
+int Cache::getTam(){
+    return cache.size();
 }
+
+int Cache::getMaxTam(){
+    return tamanho;
+}
+
+Cache criarCache(Lista<netflix> usuario,Lista<Filmes> filmes,int tamanho=14){
+    Cache cache(tamanho);
+     for (auto i = usuario.getPrimeiro(); i !=nullptr; i=i->proximo)
+    {
+        cache.inserirCache(stoi(i->valores.idFilme),filmes);
+    }
+
 return cache;}
 
 
 void Cache::inserirCache(int chave,Lista<Filmes> filmes){
     Cache_U item{filmes};
-    if(cache.size()>=tamanho){
+    
+    if (cache.find(chave)==cache.end()){
+        if(cache.size()>=tamanho){
         this->LRU();
     }
-    cache.insert({chave,filmes});
+    this->cache.insert({chave,filmes});   
+    }else 
+    {
+       cache.at(chave)=filmes;
+    }
+    
 }
 
 void Cache::LRU(){
@@ -64,15 +75,24 @@ void Cache::LRU(){
             chave=i.first;
             menor=i.second.contador;
         }
-        i.second.contador=0;
+        i.second.contador=1;
 }
- cout<<"Chave deletada: "<<cache.find(chave)->first<<"\n";
+ cout<<"Chave deletada por LRU: "<<cache.find(chave)->first<<"\n";
  cache.erase(cache.find(chave));   
 }
 
+void Cache::aumentarContador(int chave){
+    cache.find(chave)->second.contador++;
+}
 
-Lista<Filmes> &Cache::getItem(int chave){
-    auto listaFilmes{&cache.find(chave)->second};
-    listaFilmes->contador++;
-    return listaFilmes->filmes;
+Cache_U *Cache::getItem(int chave){
+   auto item=cache.find(chave);
+   if (item!=cache.end())
+   {
+       item->second.contador++;
+       return &(item->second);
+   }else
+   {
+       return nullptr;
+   }
 }
