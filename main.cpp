@@ -2,7 +2,7 @@
 #include "LerLista.hpp"
 #include "LerUsuario.hpp"
 #include "Sort.hpp"
-#include "IndicarFilmes.hpp"
+#include "Cache.hpp"
 #include "netflix.hpp"
 
 
@@ -11,6 +11,7 @@ int main(){
     
     Lista<netflix> n(GetLista());
     int k=10;
+    int tam=5;
     
     Sort(n);
 
@@ -70,5 +71,16 @@ int main(){
 
     KMelhoresFilmes(recomendacoes,k);
 
+
+    // Cache cache;
+    // cache.criarCache(u,recomendacoes,tam);
+
+    // cache.getItem(1);
+
+    // cache.inserirCache(5,recomendacoes);
+
+    // auto verificador5=cache.getItem(5);
+    // cout<<(cache.cache.find(5)==cache.cache.end() ? "sim" :"nao");
+    
     return 0;
 }
